@@ -30,6 +30,10 @@ def init_logging():
 if __name__ == '__main__':
     init_logging()
 
+    if not V2EX_USERNAME:
+        print('Please fill your username in config')
+        sys.exit(0)
+
     proxy_switcher.create_ss_proxies()
     try:
         fetcher = Fetcher()
