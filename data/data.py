@@ -146,7 +146,7 @@ class DataManager(object):
         return self.topic_collection.update_one({'id': topic_id}, {'$set': topic}, upsert=True).modified_count
 
     def es_update_assembled_topic(self, topic):
-        wanted_topic = assemble_topic(topic, self.topic_collection, self.postscript_collection)
+        wanted_topic = assemble_topic(topic, self.reply_collection, self.postscript_collection)
         body = {"doc": wanted_topic, "doc_as_upsert": True, "detect_noop": False}
         return self.es.update(index=TOPIC_ALIAS_NAME, doc_type='topic', id=topic['id'], body=body)
 
