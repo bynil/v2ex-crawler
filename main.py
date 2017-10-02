@@ -24,7 +24,6 @@ def init_logging():
 
 if __name__ == '__main__':
     init_logging()
-    wechat_notify('tset')
     if not V2EX_USERNAME:
         print('Please fill your username in config')
         sys.exit(0)
