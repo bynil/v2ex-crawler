@@ -13,12 +13,7 @@ import logging
 from fetcher import Fetcher
 from elasticsearch import ElasticsearchException
 from config.config import V2EX_USERNAME, V2EX_PASSWORD
-
-
-def notify(content):
-    ftqq_url = 'http://sc.ftqq.com/SCU210Tc7bd35817825a00aecc8e' \
-               'adde7a42ed5593fd5e35e0a6.send?text={0}&desp={1}'.format('V2EX 爬虫', content)
-    requests.get(ftqq_url)
+from utils.notification import wechat_notify
 
 
 def init_logging():
@@ -29,7 +24,7 @@ def init_logging():
 
 if __name__ == '__main__':
     init_logging()
-
+    wechat_notify('tset')
     if not V2EX_USERNAME:
         print('Please fill your username in config')
         sys.exit(0)
@@ -47,7 +42,7 @@ if __name__ == '__main__':
                 try:
                     fetcher.fetch_all_topic_extras()
                 except ElasticsearchException as es_error:
-                    notify('Elasticsearch error')
+                    wechat_notify('Elasticsearch error')
                     logging.critical('Elasticsearch error')
                     logging.critical(str(es_error))
                     logging.critical(traceback.format_exc())
@@ -75,7 +70,7 @@ if __name__ == '__main__':
                 fetcher.fetch_stale_topics()
                 fetcher.sync_topic_to_es()
             except ElasticsearchException as es_error:
-                notify('Elasticsearch error')
+                wechat_notify('Elasticsearch error')
                 logging.critical('Elasticsearch error')
                 logging.critical(str(es_error))
                 logging.critical(traceback.format_exc())

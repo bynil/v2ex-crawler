@@ -14,7 +14,9 @@ from bs4 import BeautifulSoup
 import proxy_switcher
 from api_helper import CRAWLER_HEADERS
 from token_bucket import Bucket
-from config.config import V2EX_USERNAME, V2EX_PASSWORD
+from utils.damatu import DamatuApi
+from config.config import V2EX_USERNAME, V2EX_PASSWORD, DAMATU_USERNAME, DAMATU_PASSWORD
+from utils.notification import wechat_notify
 
 V2EX_INDEX_URL = 'https://www.v2ex.com'
 V2EX_SIGNIN_URL = 'https://www.v2ex.com/signin'
@@ -22,6 +24,7 @@ V2EX_TOPIC_WEB_URL = 'https://www.v2ex.com/t/{topic_id}'
 
 bucket = Bucket(rate=0.3, burst=1)
 
+dmt = DamatuApi(DAMATU_USERNAME, DAMATU_PASSWORD)
 
 def consume_token(func):
     @functools.wraps(func)
@@ -56,8 +59,8 @@ class WebHelper(object):
 
     @consume_token
     def signin(self):
-        if (not V2EX_USERNAME) or (not V2EX_PASSWORD):
-            logging.error('Missing v2ex username or password')
+        if (not V2EX_USERNAME) or (not V2EX_PASSWORD) or (not DAMATU_USERNAME) or (not DAMATU_PASSWORD):
+            logging.error('Missing username or password')
             return False
 
         if self.has_signined():
@@ -81,14 +84,27 @@ class WebHelper(object):
         username_key = login_form.find('input', placeholder='用户名或电子邮箱地址')['name']
         password_key = login_form.find('input', type='password')['name']
         once_token = login_form.find('input', type='hidden', attrs={'name': 'once'})['value']
+        captcha_key = login_form.find('input', placeholder='请输入上图中的验证码')['name']
+        captcha_url = V2EX_INDEX_URL + '/_captcha?once=' + once_token
+
+        image_bincontent = self.session.get(captcha_url).content
+        captcha = dmt.decode_image_bin_content(image_bincontent, 200)
+        if (not isinstance(captcha, str)) or (not captcha):
+            wechat_notify(once_token + '验证码打码失败')
+            logging.warning('Decode captcha failed: ' + str(captcha))
+            return False
 
         headers = CRAWLER_HEADERS.copy()
         headers['referer'] = V2EX_SIGNIN_URL
 
         payload = {username_key: V2EX_USERNAME, password_key: V2EX_PASSWORD,
-                   'once': once_token, 'next': '/'}
+                   'once': once_token, captcha_key: captcha, 'next': '/'}
         self.session.post(V2EX_SIGNIN_URL, payload, headers=headers, proxies=proxy)
-        return self.has_signined()
+        if self.has_signined():
+            return True
+        else:
+            wechat_notify(once_token + '登录失败')
+            return False
 
     @consume_token
     def has_signined(self):
