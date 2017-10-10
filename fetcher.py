@@ -107,7 +107,7 @@ class Fetcher(object):
                 node['crawled'] = datetime.utcnow()
                 self.data.upsert_node(node)
 
-        logging.info('Fetching all node, count: ' + str(len(nodes)))
+        logging.info('Fetching all nodes, count: ' + str(len(nodes)))
 
     def fetch_new_members(self):
         site_stats = self.api.get_site_stats()

@@ -56,10 +56,18 @@ if __name__ == '__main__':
         postscript_thread.setDaemon(True)
         postscript_thread.start()
 
-
         def update_all_nodes():
-            fetcher.fetch_all_nodes()
+            while True:
+                try:
+                    fetcher.fetch_all_nodes()
+                except Exception as e:
+                    logging.error(str(e))
+                    logging.error(traceback.format_exc())
+                time.sleep(24*3600)
 
+        node_thread = threading.Thread(target=update_all_nodes)
+        node_thread.setDaemon(True)
+        node_thread.start()
 
         while True:
             try:
