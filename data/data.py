@@ -36,6 +36,8 @@ class DataManager(object):
     def create_indexes(self):
         self.node_collection.create_index([('id', pymongo.ASCENDING)], unique=True)
         self.node_collection.create_index([('name', pymongo.ASCENDING)])
+        self.node_collection.create_index([('title', pymongo.ASCENDING)])
+        self.node_collection.create_index([('title_alternative', pymongo.ASCENDING)])
 
         self.topic_collection.create_index([('id', pymongo.ASCENDING)], unique=True)
         self.topic_collection.create_index([('member_name', pymongo.ASCENDING), ('id', pymongo.ASCENDING)])
