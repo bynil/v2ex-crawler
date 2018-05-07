@@ -59,7 +59,7 @@ class WebHelper(object):
 
     @consume_token
     def signin(self):
-        if (not V2EX_USERNAME) or (not V2EX_PASSWORD) or (not DAMATU_USERNAME) or (not DAMATU_PASSWORD):
+        if (not V2EX_USERNAME) or (not V2EX_PASSWORD) or (not JSDATI_USERNAME) or (not JSDATI_PASSWORD):
             logging.error('Missing username or password')
             return False
 
