@@ -166,7 +166,7 @@ class WebHelper(object):
         for subtle_div in subtle_divs:
             content_div = subtle_div.find(attrs={'class': 'topic_content'})
             extras.subtle_list.append(content_div.get_text())
-        statistics_div = soup.find('div', attrs={'class': 'fr gray f11'})
+        statistics_div = soup.find('div', attrs={'class': 'fr topic_stats'})
         if statistics_div:
             """
             '2569 次点击  ∙  4 人收藏   ∙  1 人感谢   '
