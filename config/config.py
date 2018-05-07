@@ -15,6 +15,9 @@ ES_HOST = '127.0.0.1:9200'
 DAMATU_USERNAME = ''
 DAMATU_PASSWORD = ''
 
+JSDATI_USERNAME = ''
+JSDATI_PASSWORD = ''
+
 # shadowsocks
 # ('server_host', 'server_port', 'encrypt_method', 'password')
 ss_config_list = []

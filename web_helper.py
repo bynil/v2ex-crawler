@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 import proxy_switcher
 from api_helper import CRAWLER_HEADERS
 from token_bucket import Bucket
-from utils.damatu import DamatuApi
+from utils.jsdati import JsdatiApi
 from config.config import V2EX_USERNAME, V2EX_PASSWORD, DAMATU_USERNAME, DAMATU_PASSWORD
 from utils.notification import wechat_notify
 
@@ -24,7 +24,7 @@ V2EX_TOPIC_WEB_URL = 'https://www.v2ex.com/t/{topic_id}'
 
 bucket = Bucket(rate=0.3, burst=1)
 
-dmt = DamatuApi(DAMATU_USERNAME, DAMATU_PASSWORD)
+dmapi = JsdatiApi(DAMATU_USERNAME, DAMATU_PASSWORD)
 
 def consume_token(func):
     @functools.wraps(func)
@@ -88,7 +88,7 @@ class WebHelper(object):
         captcha_url = V2EX_INDEX_URL + '/_captcha?once=' + once_token
 
         image_bincontent = self.session.get(captcha_url).content
-        captcha = dmt.decode_image_bin_content(image_bincontent, 200)
+        captcha = dmapi.decode_image_bin_content(image_bincontent, 200)
         if (not isinstance(captcha, str)) or (not captcha):
             wechat_notify(once_token + '验证码打码失败')
             logging.warning('Decode captcha failed: ' + str(captcha))
