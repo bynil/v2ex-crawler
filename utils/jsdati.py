@@ -17,7 +17,7 @@ class JsdatiApi():
         self.username = username
         self.password = password
 
-    def decode_image_bin_content(self, content):
+    def decode_image_bin_content(self, content, type):
         filedata = base64.b64encode(content)
         payload = {'softwareId': SOFTWARE_ID,
                    'softwareSecret': SOFTWARE_SECRET,
