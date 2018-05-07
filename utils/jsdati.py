@@ -3,6 +3,7 @@
 # Author: gexiao
 # Created on 2018-05-07 22:04
 
+import logging
 import requests
 import base64
 
@@ -38,4 +39,5 @@ class JsdatiApi():
         if res['code'] == 0:
             return res['data']['recognition']
         else:
+            logging.error(res)
             return res['code']
