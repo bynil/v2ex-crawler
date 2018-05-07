@@ -15,7 +15,7 @@ import proxy_switcher
 from api_helper import CRAWLER_HEADERS
 from token_bucket import Bucket
 from utils.jsdati import JsdatiApi
-from config.config import V2EX_USERNAME, V2EX_PASSWORD, DAMATU_USERNAME, DAMATU_PASSWORD
+from config.config import V2EX_USERNAME, V2EX_PASSWORD, JSDATI_USERNAME, JSDATI_PASSWORD
 from utils.notification import wechat_notify
 
 V2EX_INDEX_URL = 'https://www.v2ex.com'
@@ -24,7 +24,7 @@ V2EX_TOPIC_WEB_URL = 'https://www.v2ex.com/t/{topic_id}'
 
 bucket = Bucket(rate=0.3, burst=1)
 
-dmapi = JsdatiApi(DAMATU_USERNAME, DAMATU_PASSWORD)
+dmapi = JsdatiApi(JSDATI_USERNAME, JSDATI_PASSWORD)
 
 def consume_token(func):
     @functools.wraps(func)
