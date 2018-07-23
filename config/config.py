@@ -24,6 +24,9 @@ ss_config_list = []
 
 V2EX_USERNAME = ''
 V2EX_PASSWORD = ''
+# http proxies
+http_proxy_list = []
+
 
 FTQQ_KEY = ''
 
