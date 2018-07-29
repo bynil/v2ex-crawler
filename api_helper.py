@@ -94,7 +94,7 @@ class APIHelper(object):
                         logging.info('Mark ip as limited because of too many retry times')
                         proxy_switcher.tag_current_ip_limited(int(time.time()+1800))
 
-            return valid_response.json()
+            return valid_response.json(strict=False)
 
         except ValueError:
             logging.critical('Error when parse json for {url} params {params}'.format(url=url, params=params))
