@@ -97,7 +97,7 @@ class APIHelper(object):
             return valid_response.json()
 
         except ValueError:
-            logging.critical('Error when parse json for {url}'.format(url=url))
+            logging.critical('Error when parse json for {url} params {params}'.format(url=url, params=params))
             raise
 
     def get_topic_count(self):
