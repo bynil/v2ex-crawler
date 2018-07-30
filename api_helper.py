@@ -8,8 +8,6 @@ import requests
 import functools
 import proxy_switcher
 import logging
-import re
-import json
 from token_bucket import Bucket
 from config.config import V2EX_USERNAME
 
@@ -36,8 +34,6 @@ MEMBER_INFO_PATH = '/api/members/show.json'  # param: `id` or `username`
 API_RATE_LIMIT_ONE_HOUR = 120
 
 bucket = Bucket(rate=0.5, burst=1)
-
-fixJsonRegex = re.compile(r'\\(?![/u"])')
 
 
 def consume_token(func):
@@ -98,8 +94,7 @@ class APIHelper(object):
                         logging.info('Mark ip as limited because of too many retry times')
                         proxy_switcher.tag_current_ip_limited(int(time.time()+1800))
 
-            fixed = fixJsonRegex.sub(r"\\\\", valid_response.text)
-            return json.loads(fixed, strict=False)
+            return valid_response.json(strict=False)
 
         except ValueError:
             logging.critical('Error when parse json for {url} params {params}'.format(url=url, params=params))
