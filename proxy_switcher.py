@@ -79,8 +79,9 @@ def get_proxy():
     if current_ip == local_ip:
         return {}
 
-    if 'http' in current_ip:
-        return {'http': 'http://{http_proxy}'.format(http_proxy=current_ip)}
+    # TODO
+    if 'https://' in current_ip:
+        return {'https': current_ip}
     if '127.0.0.1:' in current_ip:
         return {'https': 'socks5://{ss_proxy}'.format(ss_proxy=current_ip)}
     if '10.0.' in current_ip:
