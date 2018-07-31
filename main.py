@@ -71,6 +71,7 @@ if __name__ == '__main__':
 
         while True:
             try:
+                fetcher.sync_topic_to_es()
                 fetcher.fetch_new_topics()
                 fetcher.fetch_new_replies()
                 fetcher.fetch_new_members()
