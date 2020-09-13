@@ -101,6 +101,7 @@ class WebHelper(object):
                    'once': once_token, captcha_key: captcha, 'next': '/'}
         self.session.post(V2EX_SIGNIN_URL, payload, headers=headers, proxies=proxy)
         if self.has_signined():
+            logging.info('重新登录成功')
             return True
         else:
             wechat_notify(once_token + '登录失败')
@@ -113,7 +114,7 @@ class WebHelper(object):
         if response.status_code != 200:
             return True
         index_page = response.text
-        return 'class="top">登出</a></td>' in index_page
+        return 'href="/settings"' in index_page
 
     @consume_token
     def get_topic_extras(self, topic_id) -> WebExtras:
