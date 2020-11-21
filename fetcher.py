@@ -61,7 +61,9 @@ class Fetcher(object):
         else:
             topic = self.data.find_topic(max_stored_topic_id_of_reply)
             replies = self.data.find_all_replies(max_stored_topic_id_of_reply)
-            need_refetch_max_topic = not (replies.count() == topic['replies'])
+            if 'replies' not in topic:
+                logging.error('replies key is missing of topic {0}', topic)
+            need_refetch_max_topic = ('replies' not in topic) or (not (replies.count() == topic['replies']))
         for topic_id in range(max_stored_topic_id_of_reply + 1 - int(need_refetch_max_topic), max_stored_topic_id + 1):
             if self.data.find_topic(topic_id=topic_id):
                 self.fetch_replies_of_topic(topic_id)
