@@ -11,7 +11,7 @@ from random import randint
 from config.config import ss_config_list, http_proxy_list
 from data.data import DataManager
 
-subprocess.call(('killall', 'ss-local'))
+## subprocess.call(('killall', 'ss-local'))
 
 current_ip = ''
 local_ip = 'local_ip'
