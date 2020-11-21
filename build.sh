@@ -1,0 +1,1 @@
+docker build -t v2ex-crawler:1.0.0 .
