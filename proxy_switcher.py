@@ -7,6 +7,7 @@ import time
 import shlex
 import logging
 import subprocess
+import os
 from random import randint
 from config.config import ss_config_list, http_proxy_list
 from data.data import DataManager
@@ -28,9 +29,16 @@ def create_ss_proxies():
     if ss_process_list:
         return
 
+    proxies_env = os.getenv('HTTP_PROXY_LIST')
+    if proxies_env:
+        proxies = proxies_env.split(',')
+        for p in proxies:
+            ss_proxy_list.append(p)
+
     for http_proxy in http_proxy_list:
         ss_proxy_list.append(http_proxy)
-        
+
+    logging.info('ss_proxy_list ' + str(ss_proxy_list))
     for index, config in enumerate(ss_config_list):
         local_port = 1090 + index
         args = shlex.split(
@@ -103,7 +111,7 @@ def random_proxy():
             return {'https': 'socks5://{ss_proxy}'.format(ss_proxy=random_ip)}
         if '10.0.' in random_ip:
             return {'https': 'http://{ss_proxy}'.format(ss_proxy=random_ip)}
-        return {}
+        return random_ip
 
     def test_all_proxies():
         if len(random_proxy_mute_dict) < len(ss_proxy_list)+1:
