@@ -66,7 +66,7 @@ class APIHelper(object):
         url = V2EX_SITE_URL + path
         try:
             def do_request():
-                response = self.session.get(url, params=params, timeout=60, proxies=proxy_switcher.get_proxy())
+                response = self.session.get(url, params=params, timeout=120, proxies=proxy_switcher.get_proxy())
                 limit_remain = int(response.headers.get('x-rate-limit-remaining', API_RATE_LIMIT_ONE_HOUR))
                 if response.status_code == 403:
                     logging.info('api response 403')

@@ -125,7 +125,7 @@ class WebHelper(object):
         try:
             topic_page_response = self.session.get(V2EX_TOPIC_WEB_URL.format(topic_id=topic_id),
                                                    allow_redirects=False,
-                                                   timeout=5, proxies=proxy)
+                                                   timeout=120, proxies=proxy)
         except Exception as e:
             logging.error('get_topic_extras error: ' + str(e))
             proxy_switcher.mute_random_proxy(proxy)
