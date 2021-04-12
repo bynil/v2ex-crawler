@@ -111,7 +111,7 @@ def random_proxy():
             return {'https': 'socks5://{ss_proxy}'.format(ss_proxy=random_ip)}
         if '10.0.' in random_ip:
             return {'https': 'http://{ss_proxy}'.format(ss_proxy=random_ip)}
-        return random_ip
+        return {'http': '{ss_proxy}'.format(ss_proxy=random_ip)}
 
     def test_all_proxies():
         if len(random_proxy_mute_dict) < len(ss_proxy_list)+1:
