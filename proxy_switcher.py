@@ -62,8 +62,8 @@ def auto_choose_ip():
     if current_ip and current_ip not in limited_ip_list:
         return current_ip
 
-    if local_ip not in limited_ip_list:
-        return local_ip
+    # if local_ip not in limited_ip_list:
+    #     return local_ip
 
     for ss_proxy in ss_proxy_list:
         if ss_proxy not in limited_ip_list:
@@ -99,7 +99,7 @@ def get_proxy():
 
 def random_proxy():
     def new_random_proxy():
-        random_index = randint(0, len(ss_proxy_list))
+        random_index = randint(0, len(ss_proxy_list)-1)
         random_ip = local_ip
         if random_index < len(ss_proxy_list):
             random_ip = ss_proxy_list[random_index]
