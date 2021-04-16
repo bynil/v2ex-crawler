@@ -64,9 +64,12 @@ class APIHelper(object):
         """
 
         url = V2EX_SITE_URL + path
+        # proxy = proxy_switcher.get_proxy()
+        proxy = proxy_switcher.random_proxy()
         try:
             def do_request():
-                response = self.session.get(url, params=params, timeout=60, proxies=proxy_switcher.get_proxy())
+                response = self.session.get(url, params=params, timeout=60, proxies=proxy)
+                logging.info('do request with proxy {proxy}'.format(proxy=proxy))
                 limit_remain = int(response.headers.get('x-rate-limit-remaining', API_RATE_LIMIT_ONE_HOUR))
                 if response.status_code == 403:
                     logging.info('api response 403')
@@ -87,7 +90,7 @@ class APIHelper(object):
                     valid_response = do_request()
                 except requests.exceptions.RequestException as e:
                     logging.error('Error when fetch {url} with proxy{proxy}: {exception}'
-                                  .format(proxy=proxy_switcher.get_proxy(), url=url, exception=str(e)))
+                                  .format(proxy=proxy, url=url, exception=str(e)))
                     self.session = requests.Session()
                     self.session.headers = CRAWLER_HEADERS
                     if retry_times >= 5:
