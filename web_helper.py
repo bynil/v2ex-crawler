@@ -87,7 +87,7 @@ class WebHelper(object):
         captcha_key = login_form.find('input', placeholder='请输入上图中的验证码')['name']
         captcha_url = V2EX_INDEX_URL + '/_captcha?once=' + once_token
 
-        image_bincontent = self.session.get(captcha_url).content
+        image_bincontent = self.session.get(captcha_url, proxies=proxy).content
         captcha = dmapi.decode_image_bin_content(image_bincontent, 200)
         if (not isinstance(captcha, str)) or (not captcha):
             wechat_notify(once_token + '验证码打码失败')
