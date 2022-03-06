@@ -52,9 +52,9 @@ if __name__ == '__main__':
                 time.sleep(600)
 
 
-        postscript_thread = threading.Thread(target=fetch_extras)
-        postscript_thread.setDaemon(True)
-        postscript_thread.start()
+        # postscript_thread = threading.Thread(target=fetch_extras)
+        # postscript_thread.setDaemon(True)
+        # postscript_thread.start()
 
         def update_all_nodes():
             while True:
