@@ -114,8 +114,6 @@ def random_proxy():
         return {'https': '{ss_proxy}'.format(ss_proxy=random_ip)}
 
     def test_all_proxies():
-        if len(random_proxy_mute_dict) < len(ss_proxy_list)+1:
-            return
         for proxy, mute_time in random_proxy_mute_dict.items():
             if mute_time <= time.time():
                 return

@@ -65,10 +65,12 @@ class APIHelper(object):
 
         url = V2EX_SITE_URL + path
         # proxy = proxy_switcher.get_proxy()
-        proxy = proxy_switcher.random_proxy()
         try:
+            proxy = proxy_switcher.random_proxy()
+
             def do_request():
-                response = self.session.get(url, params=params, timeout=60, proxies=proxy)
+                p = proxy.copy()
+                response = self.session.get(url, params=params, timeout=60, proxies=p)
                 logging.info('do request with proxy {proxy}'.format(proxy=proxy))
                 limit_remain = int(response.headers.get('x-rate-limit-remaining', API_RATE_LIMIT_ONE_HOUR))
                 if response.status_code == 403:
@@ -78,6 +80,7 @@ class APIHelper(object):
                 if limit_remain <= 1:
                     reset_time = int(response.headers.get('x-rate-limit-reset', int(time.time()+1800)))
                     proxy_switcher.tag_current_ip_limited(reset_time)
+                    proxy_switcher.mute_random_proxy(proxy)
                     return response if limit_remain else None
                 else:
                     return response
@@ -86,6 +89,11 @@ class APIHelper(object):
             retry_times = 0
             while not valid_response:
                 try:
+                    if retry_times >= 5:
+                        logging.info('Mark ip as limited because of too many retry times')
+                        proxy_switcher.tag_current_ip_limited(int(time.time()+1800))
+                        proxy_switcher.mute_random_proxy(proxy)
+                        proxy = proxy_switcher.random_proxy()
                     retry_times += 1
                     valid_response = do_request()
                 except requests.exceptions.RequestException as e:
@@ -96,6 +104,8 @@ class APIHelper(object):
                     if retry_times >= 5:
                         logging.info('Mark ip as limited because of too many retry times')
                         proxy_switcher.tag_current_ip_limited(int(time.time()+1800))
+                        proxy_switcher.mute_random_proxy(proxy)
+                        proxy = proxy_switcher.random_proxy()
 
             return valid_response.json(strict=False)
 
