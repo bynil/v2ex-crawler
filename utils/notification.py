@@ -8,6 +8,6 @@ from config.config import FTQQ_KEY
 
 
 def wechat_notify(content):
-    ftqq_url = 'http://sc.ftqq.com/{0}.send?text={1}&desp={2}'.format(FTQQ_KEY, 'V2EX 爬虫', content)
+    ftqq_url = 'https://sctapi.ftqq.com/{0}.send?title={1}&desp={2}'.format(FTQQ_KEY, 'V2EX 爬虫', content)
     requests.get(ftqq_url)
 
