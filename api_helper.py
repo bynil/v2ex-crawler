@@ -69,7 +69,9 @@ class APIHelper(object):
             proxy = proxy_switcher.random_proxy()
 
             def do_request():
-                p = proxy.copy()
+                p = {}
+                if proxy:
+                    p = proxy.copy()
                 response = self.session.get(url, params=params, timeout=60, proxies=p)
                 logging.info('do request with proxy {proxy}'.format(proxy=proxy))
                 limit_remain = int(response.headers.get('x-rate-limit-remaining', API_RATE_LIMIT_ONE_HOUR))
