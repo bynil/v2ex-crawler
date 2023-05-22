@@ -7,7 +7,7 @@ html5lib==0.999999999
 idna==2.6
 pymongo==3.5.1
 PySocks==1.6.7
-requests==2.20.0
+requests==2.31.0
 six==1.11.0
 urllib3==1.24.2
 webencodings==0.5.1
