@@ -121,14 +121,14 @@ def random_proxy():
         time.sleep(200)
 
     proxy = new_random_proxy()
-
-    if str(proxy) in random_proxy_mute_dict:
+    while str(proxy) in random_proxy_mute_dict:
         mute_time = random_proxy_mute_dict[str(proxy)]
         if mute_time > time.time():
             time.sleep(1)
-            return random_proxy()
+            proxy = new_random_proxy()
         else:
             del random_proxy_mute_dict[str(proxy)]
+            return proxy
 
     return proxy
 
