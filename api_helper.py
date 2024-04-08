@@ -93,19 +93,27 @@ class APIHelper(object):
                 try:
                     if retry_times >= 5:
                         logging.info('Mark ip as limited because of too many retry times')
-                        proxy_switcher.tag_current_ip_limited(int(time.time()+120))
+                        proxy_switcher.tag_current_ip_limited(int(time.time() + 120))
                         proxy_switcher.mute_random_proxy(proxy)
                         proxy = proxy_switcher.random_proxy()
                     retry_times += 1
                     valid_response = do_request()
                 except requests.exceptions.RequestException as e:
+                    if isinstance(e, requests.exceptions.ReadTimeout) and path == REPLIES_OF_TOPIC_PATH:
+                        # ignore timeout for some large topics: https://www.v2ex.com/t/991748
+                        # TODO refactor by API V2
+                        logging.warning(
+                            'ReadTimeout Error when fetch {url} {params} with proxy{proxy}: {exception}, ignore replies'
+                            .format(proxy=proxy, url=url, params=params, exception=str(e)))
+                        return None
+
                     logging.error('Error when fetch {url} {params} with proxy{proxy}: {exception}'
                                   .format(proxy=proxy, url=url, params=params, exception=str(e)))
                     self.session = requests.Session()
                     self.session.headers = CRAWLER_HEADERS
                     if retry_times >= 5:
                         logging.info('Mark ip as limited because of too many retry times')
-                        proxy_switcher.tag_current_ip_limited(int(time.time()+120))
+                        proxy_switcher.tag_current_ip_limited(int(time.time() + 120))
                         proxy_switcher.mute_random_proxy(proxy)
                         proxy = proxy_switcher.random_proxy()
 
@@ -251,4 +259,3 @@ class APIHelper(object):
         }
         """
         return self._send_request(STATS_API_PATH)
-
