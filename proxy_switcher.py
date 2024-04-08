@@ -125,6 +125,7 @@ def random_proxy():
         mute_time = random_proxy_mute_dict[str(proxy)]
         if mute_time > time.time():
             time.sleep(1)
+            logging.info('proxy {proxy} is muted, try another one'.format(proxy=proxy))
             proxy = new_random_proxy()
         else:
             del random_proxy_mute_dict[str(proxy)]

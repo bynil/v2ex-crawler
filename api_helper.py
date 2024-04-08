@@ -93,19 +93,19 @@ class APIHelper(object):
                 try:
                     if retry_times >= 5:
                         logging.info('Mark ip as limited because of too many retry times')
-                        proxy_switcher.tag_current_ip_limited(int(time.time()+1800))
+                        proxy_switcher.tag_current_ip_limited(int(time.time()+120))
                         proxy_switcher.mute_random_proxy(proxy)
                         proxy = proxy_switcher.random_proxy()
                     retry_times += 1
                     valid_response = do_request()
                 except requests.exceptions.RequestException as e:
-                    logging.error('Error when fetch {url} with proxy{proxy}: {exception}'
-                                  .format(proxy=proxy, url=url, exception=str(e)))
+                    logging.error('Error when fetch {url} {params} with proxy{proxy}: {exception}'
+                                  .format(proxy=proxy, url=url, params=params, exception=str(e)))
                     self.session = requests.Session()
                     self.session.headers = CRAWLER_HEADERS
                     if retry_times >= 5:
                         logging.info('Mark ip as limited because of too many retry times')
-                        proxy_switcher.tag_current_ip_limited(int(time.time()+1800))
+                        proxy_switcher.tag_current_ip_limited(int(time.time()+120))
                         proxy_switcher.mute_random_proxy(proxy)
                         proxy = proxy_switcher.random_proxy()
 
