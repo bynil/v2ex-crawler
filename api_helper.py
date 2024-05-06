@@ -12,11 +12,11 @@ from token_bucket import Bucket
 from config.config import V2EX_USERNAME
 
 CRAWLER_HEADERS = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept': '*/*',
     'Upgrade-Insecure-Requests': "1",
     'User-Agent': 'V2EX Crawler @{username}'.format(username=V2EX_USERNAME),
     'pragma': 'no-cache',
-    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Encoding': 'gzip, deflate',
     'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4',
 }
 
